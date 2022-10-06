@@ -1,2 +1,2 @@
 # JReactive
-Reactive components for Java
+Reactive components for Java.
