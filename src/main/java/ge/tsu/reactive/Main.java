@@ -1,9 +1,9 @@
 package ge.tsu.reactive;
 
 public class Main {
-    
+
     public static void main(String[] args) {
-        // Observer patter usage (behavioural)
+        // Observable
         var observable = new Observable<Integer>(subscriber -> {
             subscriber.next(1);
             subscriber.next(2);
@@ -11,23 +11,23 @@ public class Main {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
+                return;
             }
             subscriber.next(4);
             subscriber.error(new Error("Something bad happened!"));
             subscriber.complete();
         });
 
-        System.out.println("just before subscribe");
-        observable.subscribe(
-                next -> {
-                    System.out.println("Do some stuff with variable: " + next);
-                },
-                error -> {
-                    System.out.println(error.getMessage());
-                },
-                () -> {
-                    System.out.println("Completed stuff");
-                });
+        // Observer
+        Observer<Integer> observer = o -> System.out.println("DOING SOMETHING WITH: " + o);
+
+        // Subscribe method creates Subscription thread object and executes code
+        Subscription<Integer> subscription = observable.subscribe(observer);
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+        }
+        subscription.unsubscribe();
         System.out.println("just after subscribe");
     }
 }
